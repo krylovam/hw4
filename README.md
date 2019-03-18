@@ -13,5 +13,6 @@ persons ( id int auto_increment not null, surname varchar(256), name varchar(256
 1. Скачать репозиторий любым удобным способом
 2. Открыть проект в Intellij IDEA
 3. Добавить нужные библиотеки в проект(Project Structure -> Modules -> Dependencies - > "+" -> выбираем все jar файлы из папки resources
-4. Изменяем значения URL, USER, PASS в соответствии со своими
+4. Изменяем значения URL, USER, PASS в соответствии со своими(переменная URL, если локальная база данных, то изменяем только ее название,
+переменная USER и переменная PASS
 5. Запускаем программу
