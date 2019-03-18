@@ -54,7 +54,7 @@ public class Helper {
                     row.createCell(3).setCellValue(UserMas.get(i - 1).getAge());
                     row.createCell(4).setCellValue(UserMas.get(i - 1).getGender());
                     GregorianCalendar gc = UserMas.get(i-1).getDob();
-                    row.createCell(5).setCellValue(gc.get(Calendar.DAY_OF_MONTH) + "." + (gc.get(Calendar.MONTH)+1) + "." + gc.get(Calendar.YEAR));
+                    row.createCell(5).setCellValue(String.format("%s%s%s%s%s",gc.get(Calendar.DAY_OF_MONTH),".",gc.get(Calendar.MONTH),".",gc.get(Calendar.YEAR)));
                     row.createCell(6).setCellValue(UserMas.get(i - 1).getInn());
                     row.createCell(7).setCellValue(UserMas.get(i - 1).getPostcode());
                     row.createCell(8).setCellValue(UserMas.get(i-1).getCountry());
@@ -100,7 +100,7 @@ public class Helper {
                 table.addCell(new Paragraph(String.valueOf(UserMas.get(i).getAge()), font));
                 table.addCell(new Paragraph(UserMas.get(i).getGender(), font));
                 GregorianCalendar gc = UserMas.get(i).getDob();
-                table.addCell(new Paragraph(gc.get(Calendar.DAY_OF_MONTH) + "." + (gc.get(Calendar.MONTH)+1) + "." + gc.get(Calendar.YEAR)));
+                table.addCell(new Paragraph(String.format("%s%s%s%s%s",gc.get(Calendar.DAY_OF_MONTH),".",gc.get(Calendar.MONTH),".",gc.get(Calendar.YEAR))));
                 table.addCell(new Paragraph(UserMas.get(i).getInn(), font));
                 table.addCell(new Paragraph(UserMas.get(i).getPostcode()));
                 table.addCell(new Paragraph(UserMas.get(i).getCountry()));
