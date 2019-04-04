@@ -1,23 +1,24 @@
 package fintech4;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
+
+import org.apache.http.HttpResponse;
 import org.codehaus.jackson.*;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.GregorianCalendar;
 import java.util.Map;
+
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserApi implements AutoCloseable{
     private String gender;
-    private Map<String, String> name;
-    private Map<Object, Object> location;
-    private Map<String, String> dob;
+    private Map<String, String> mName;
+    private Map<Object, Object> mLocation;
+    private Map<String, String> mDob;
 
     public String getGender() {
         return gender;
@@ -28,49 +29,49 @@ public class UserApi implements AutoCloseable{
     }
 
     public Map<String, String> getName() {
-        return name;
+        return mName;
     }
 
     public void setName(Map<String, String> name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public Map<Object, Object> getLocation() {
-        return location;
+        return mLocation;
     }
 
     public void setLocation(Map<Object, Object> location) {
-        this.location = location;
+        this.mLocation = location;
     }
 
     public Map<String, String> getDob() {
-        return dob;
+        return mDob;
     }
 
     public void setDob(Map<String, String> dob) {
-        this.dob = dob;
+        this.mDob = dob;
     }
 
     public User getUserApi() throws Exception {
-        String date = dob.get("date");
+        String date = mDob.get("date");
         String year = date.substring(0,4);
         String month = date.substring(5,7);
         String day = date.substring(8, 10);
         GregorianCalendar calendar = new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
         User user = new User();
-        user.setFirstName(name.get("first"));
-        user.setLastName(name.get("last"));
-        user.setTitle(name.get("title"));
+        user.setFirstName(mName.get("first"));
+        user.setLastName(mName.get("last"));
+        user.setTitle(mName.get("title"));
         if (gender.equals("female")){
             user.setGender("Ж");
         }
         else user.setGender("М");
-        user.setCity((String)location.get("city"));
-        user.setState(String.valueOf(location.get("state")));
+        user.setCity((String)mLocation.get("city"));
+        user.setState(String.valueOf(mLocation.get("state")));
         user.setCountry("-");
-        user.setStreet(String.valueOf(location.get("street")));
-        user.setPostcode(String.valueOf(location.get("postcode")));
-        user.setAGE(Integer.parseInt(dob.get("age")));
+        user.setStreet(String.valueOf(mLocation.get("street")));
+        user.setPostcode(String.valueOf(mLocation.get("postcode")));
+        user.setAGE(Integer.parseInt(mDob.get("age")));
         user.setHouse();
         user.setFlat();
         user.setINN();
@@ -82,6 +83,42 @@ public class UserApi implements AutoCloseable{
         this.setGender(null);
         this.setName(null);
         this.setLocation(null);
+    }
+    public UserApi mapUser(String json)throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(json).get("results");
+        UserApi userApi = new UserApi();
+        try{
+            UserApi userApi1 = mapper.readValue(jsonNode.get(0).toString(),UserApi.class);
+            userApi = userApi1;
+            return userApi;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("error mapping json");
+        }
+        finally {
+            return userApi;
+        }
+    }
+
+
+    public String streamToString(HttpResponse res) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("error reading");
+        }finally {
+            reader.close();
+        }
+        return null;
     }
 
 }

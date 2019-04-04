@@ -1,0 +1,3 @@
+jdbc:mysql://localhost:3306/fintech?verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true&requireSSL=false&useLegacyDatetimeCode=false&amp&serverTimezone=UTC
+root
+fintech4

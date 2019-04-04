@@ -11,134 +11,134 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class User {
-    private String gender;
+    private String mGender;
 
-    private String title;
-    private String firstName;
-    private String lastName;
-    private String inn;
+    private String mTitle;
+    private String mFirstName;
+    private String mLastName;
+    private String mInn;
 
-    private String city;
-    private String street;
-    private String state;
-    private String country;
-    private int house;
-    private int flat;
-    private String postcode;
+    private String mCity;
+    private String mStreet;
+    private String mState;
+    private String mCountry;
+    private int mHouse;
+    private int mFlat;
+    private String mPostcode;
 
-    private GregorianCalendar dob;
-    private int age;
+    private GregorianCalendar mDob;
+    private int mAge;
 
     public String getCountry() {
-        return country;
+        return mCountry;
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.mCountry = country;
     }
 
     public String getGender() {
-        return gender;
+        return mGender;
     }
     public void SetGender(String gender){
         if (gender.equals("female")){
-            this.gender = "Ж";
+            this.mGender = "Ж";
         }else{
-            this.gender = "М";
+            this.mGender = "М";
         }
     }
-    public void setInn(String inn) {this.inn = inn;}
+    public void setInn(String inn) {this.mInn = inn;}
     public void setGender(String gender) {
-        this.gender = gender;
+        this.mGender = gender;
     }
 
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.mTitle = title;
     }
 
     public String getFirstName() {
-        return firstName;
+        return mFirstName;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.mFirstName = firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return mLastName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.mLastName = lastName;
     }
 
     public String getCity() {
-        return city;
+        return mCity;
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.mCity = city;
     }
 
     public String getStreet() {
-        return street;
+        return mStreet;
     }
 
     public void setStreet(String street) {
-        this.street = street;
+        this.mStreet = street;
     }
 
     public String getState() {
-        return state;
+        return mState;
     }
 
     public void setState(String state) {
-        this.state = state;
+        this.mState = state;
     }
 
     public int getHouse() {
-        return house;
+        return mHouse;
     }
 
     public void setHouse(int house) {
-        this.house = house;
+        this.mHouse = house;
     }
 
     public String getPostcode() {
-        return postcode;
+        return mPostcode;
     }
 
     public void setPostcode(String postcode) {
-        this.postcode = postcode;
+        this.mPostcode = postcode;
     }
 
     public GregorianCalendar getDob() {
-        return dob;
+        return mDob;
     }
 
     public void setDob(GregorianCalendar dob) {
-        this.dob = dob;
+        this.mDob = dob;
     }
 
     public int getAge() {
-        return age;
+        return mAge;
     }
 
     public void setAGE(int age) {
-        this.age = age;
+        this.mAge = age;
     }
 
     public void setFlat() {
         Random rand = new Random();
         int flat = (1 + rand.nextInt(1000));
-        this.flat = flat;
+        this.mFlat = flat;
     }
     public int getFlat() {
-        return flat;
+        return mFlat;
     }
     public void setINN() throws Exception {
         String inn = new String();
@@ -174,24 +174,24 @@ public class User {
         for(Iterator var11 = Inn.iterator(); var11.hasNext(); inn = inn + i) {
             i = (Integer)var11.next();
         }
-        this.inn = inn;
+        this.mInn = inn;
     }
     public String getInn() {
-        return inn;
+        return mInn;
     }
     public void setHouse() {
         Random rand = new Random();
         int house = (1 + rand.nextInt(100));
-        this.house = house;
+        this.mHouse = house;
     }
-    public void setFlat(int flat){ this.flat = flat;}
+    public void setFlat(int flat){ this.mFlat = flat;}
     public void setDayOfBirth() {
         GregorianCalendar gc = new GregorianCalendar();
         int year = randBetween(1900, 2018);
         gc.set(1, year);
         int dayOfYear = randBetween(1, gc.getActualMaximum(6));
         gc.set(6, dayOfYear);
-        this.dob = gc;
+        this.mDob = gc;
     }
 
     public int randBetween(int start, int end) {
@@ -214,7 +214,7 @@ public class User {
                 --age;
             }
         }
-        this.age = age;
+        this.mAge = age;
     }
     public static String getAddress(String filename,int count)throws Exception {
         BufferedReader bufferedReader = new BufferedReader(beginReading(filename));
@@ -240,14 +240,16 @@ public class User {
     public void setPostcode(){
         Random rand = new Random();
         long postcode = 100000 + rand.nextInt(100000);
-        this.postcode = String.valueOf(postcode);
+        this.mPostcode = String.valueOf(postcode);
     }
     public User getUserFromDB(Connection con, int i)throws Exception {
         User user = new User();
+        Statement stmt = con.createStatement();
+        ResultSet rsPerson = null;
+        ResultSet rsAddress = null;
         try {
-            Statement stmt = con.createStatement();
             String queryGetUserPerson = String.format("%s%s%s", "select * from persons where id = ", String.valueOf(i), ";");
-            ResultSet rsPerson = stmt.executeQuery(queryGetUserPerson);
+            rsPerson = stmt.executeQuery(queryGetUserPerson);
             int address_id = 0;
             while (rsPerson.next()) {
                 user.setLastName(rsPerson.getString("surname"));
@@ -264,7 +266,7 @@ public class User {
             stmt = null;
             String queryGetUserAddress = String.format("%s%s%s", "select * from address where id = ", String.valueOf(address_id), ";");
             stmt = con.createStatement();
-            ResultSet rsAddress = stmt.executeQuery(queryGetUserAddress);
+            rsAddress = stmt.executeQuery(queryGetUserAddress);
             while (rsAddress.next()) {
                 user.setPostcode(rsAddress.getString("postcode"));
                 user.setCountry(rsAddress.getString("country"));
@@ -278,8 +280,12 @@ public class User {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("wrong select query");
         } finally {
             con.close();
+            stmt.close();
+            rsAddress.close();
+            rsPerson.close();
         }
         return user;
     }
